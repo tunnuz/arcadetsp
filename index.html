@@ -477,6 +477,29 @@
           return a;
       }
 
+      function performRandomSwap(current) {
+        // perform random swap
+        var i = Math.floor(Math.random() * current.length);
+        var j = i +  Math.floor(Math.random() * current.length - i);
+
+        var s = current[i];
+        current[i] = current[j];
+        current[j] = s;
+      }
+
+      function performRandomRelocate(current) {
+        // perform random relocate
+        var i = undefined, j = undefined;
+        while (i == j) {
+          var i = Math.floor(Math.random() * current.length);
+          var j = Math.floor(Math.random() * current.length);
+        }
+
+        var s = current[i];
+        current.splice(i,1);
+        current.splice(j, 0, s)
+      }
+
       async function solve() {
 
         var canvas = $('#board').get(0);
@@ -496,56 +519,44 @@
 
         var bestCost = costOf(current);
         var currentCost = bestCost;
+        var temperature = 100;
+        var coolingRate = 0.99;
 
-        var budget = 1000000;
-        while (budget > 0) {
+        var iterations = 0;
 
-          budget--;
+        while (temperature >= 1e-5) {
+
+          iterations++;
+
+          temperature *= coolingRate;
 
           var original = current.slice();
 
           if (Math.random() < 0.5) {
-
-            // perform random swap
-            var i = Math.floor(Math.random() * current.length);
-            var j = i +  Math.floor(Math.random() * current.length - i);
-
-            var s = current[i];
-            current[i] = current[j];
-            current[j] = s;
-
+            performRandomSwap(current);
           } else {
-
-            // perform random relocate
-            var i = undefined, j = undefined;
-            while (i == j) {
-              var i = Math.floor(Math.random() * current.length);
-              var j = Math.floor(Math.random() * current.length);
-            }
-
-            var s = current[i];
-            current.splice(i,1);
-            current.splice(j, 0, s)
-
+            performRandomRelocate(current);
           }
 
           var newCost = costOf(current);
+          var delta = newCost - currentCost;
+          var probability = Math.exp(-delta/temperature);
 
           if (newCost <= currentCost) {
             currentCost = newCost;
-            if (currentCost < bestCost) {
-              newBest(current);
-              await sleep(50);
-              bestCost = currentCost;
-              redrawCanvas(canvas);
-            }
-          } else {
-            if (newCost > currentCost * 1.1) {
-              current = original;
-            } else {
+          } else if (Math.random() < probability) {
               currentCost = newCost;
-            }
+          } else {
+            current = original;
           }
+
+          if (currentCost < bestCost) {
+            newBest(current);
+            await sleep(50);
+            bestCost = currentCost;
+            redrawCanvas(canvas);
+          }
+
         }
 
         if (costOf(optimisedSolution) < costOf(solution)) {
