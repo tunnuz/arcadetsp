@@ -62,6 +62,9 @@
         animation-direction: alternate;
         animation-timing-function: ease-in-out;
       }
+      .disabled {
+        color: grey !important;
+      }
       @keyframes blink {
           from {
               opacity: 1;
@@ -110,7 +113,23 @@
         margin: auto;
         text-align: center;
       }
-
+      #menu {
+        margin: auto;
+        width: 1024px;
+        text-align: center;
+      }
+      #menu form {
+        float: left;
+        width: 640px;
+      }
+      #menu p {
+        float: right;
+        width: 350px;
+        margin: 0px;
+        padding: 0px;
+        text-align: left;
+        margin-top: -70px;
+      }
       img {
         height: 400px;
       }
@@ -300,6 +319,23 @@
           document.getElementById('cpu_cost').textContent = costOf(optimisedSolution);
         }
         document.getElementById('message').innerHTML = message;
+        updateButtons();
+      }
+
+      function updateButtons() {
+        $('#clearButton').addClass('disabled');
+        $('#playButton').addClass('disabled');
+        $('#solveButton').addClass('disabled');
+
+        if (points.length > 0) {
+            $('#clearButton').removeClass('disabled');
+        }
+        if (points.length >= minPoints) {
+          $('#playButton').removeClass('disabled');
+        }
+        if (solution.length > 0 && solution.length == points.length && message != "Thinking ...") {
+          $('#solveButton').removeClass('disabled');
+        }
       }
 
       function setMode(newMode) {
@@ -307,7 +343,7 @@
          if (newMode == 'play') {
            solution = [];
            optimisedSolution = [];
-           message = "<p>Left-click on the points in turn to create a path (right-click to remove a point from the path).</p><p>Then press <span class='yellow'>[ SOLVE ]</span> to see if you can do better than our robotic overlords.</p>";
+           message = "<p>Left-click on the points in turn to create a path (right-click to remove a point from the path).</p><p>Then press <span class='yellow'>[ CHECK ]</span> to see if you can do better than our robotic overlords.</p>";
          } else if (newMode == 'build') {
            points = [];
            solution = [];
@@ -585,11 +621,19 @@
       <p id="message"></p>
       <canvas id='board' width='640' height='480'></canvas>
     </div>
-    <form>
-      <input type='button' id='clearButton' value='[ clear ]' />
-      <input type='button' id='playButton' value='[ play ]' />
-      <input type='button' id='solveButton' value='[ solve ]' />
-      <span class="blue">[ COST: <span id='cost'>0</span> ]</span> <span class="pink">[ CPU COST:  <span id='cpu_cost'>0</span> ]
-    </form>
+    <div id="menu">
+
+      <form>
+        <input type='button' id='clearButton' class='disabled' value='[ clear ]' />
+        <input type='button' id='playButton' class='disabled' value='[ play ]' />
+        <input type='button' id='solveButton' class='disabled' value='[ check ]' />
+      </form>
+      <p>
+        SCORE<br />
+        <span class="blue">ORGANIC: <span id='cost'>0</span></span><br />
+        <span class="pink">SYNTHETIC: <span id='cpu_cost'>0</span>
+      </p>
+
+    </div>
   </body>
 </html>
