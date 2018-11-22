@@ -8,7 +8,9 @@
        padding: 0px;
        margin: 0px;
      }
+     ::selection { color: auto; background-color: transparent; }
       body {
+        cursor: crosshair;
         padding: 0px;
         margin: 0px;
         text-align: center;
@@ -17,12 +19,15 @@
         color: #1481ba;
         font-family: "Press Start 2P";
       }
+      button {
+        cursor: crosshair !important;
+      }
       h1 {
         font-family: 'Monoton';
         color: #f9b9f2;
         text-transform: uppercase;
-        font-size: 81pt;
-        margin: 10px;
+        font-size: 105pt;
+        margin: 15px 0 0 0;
         font-weight: normal;
         padding: 0px;
       }
@@ -555,8 +560,8 @@
 
         var bestCost = costOf(current);
         var currentCost = bestCost;
-        var temperature = 100;
-        var coolingRate = 0.99;
+        var temperature = 1000;
+        var coolingRate = 0.999;
 
         var iterations = 0;
 
