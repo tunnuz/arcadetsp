@@ -312,10 +312,10 @@ var setUpGame = function() {
   });
 
   setMode("build");
-
-  var soundtrack = new Audio("fx/ost.wav");
-  soundtrack.loop = true;
-  soundtrack.play();
+ 
+  // var soundtrack = new Audio("fx/ost.wav");
+  // soundtrack.loop = true;
+  // soundtrack.play();
 
   // Starfield
   var container = document.getElementById('starfield');
