@@ -1,6 +1,6 @@
 # Arcade TSP
 
-An arcade-style TSP challenge game, follow the in-game instructions.
+An arcade-style TSP challenge game written for [Satalia](https://github.com/tunnuz/arcadetsp)'s 2018 Christmas Party, follow the in-game instructions.
 
 ![Screenshot](https://i.imgur.com/LyhXwZZ.png)
 
